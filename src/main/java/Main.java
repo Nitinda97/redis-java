@@ -24,9 +24,13 @@ public class Main {
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                String message = in.readLine();
-                System.out.println("Received from client: " + message);
-                out.println("+PONG\r");
+                while (!clientSocket.isClosed()) {
+                    String message = in.readLine();
+                    if (message == null)
+                        break;
+                    if(message.equalsIgnoreCase("PING"))
+                        out.println("+PONG\r");
+                }
                 }
             catch (IOException e) {
                     System.out.println("IOException: " + e.getMessage());
